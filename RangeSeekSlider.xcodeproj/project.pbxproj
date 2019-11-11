@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE00D96E1E7AA99A0032CA93 /* CustomRangeSeekSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE00D96D1E7AA99A0032CA93 /* CustomRangeSeekSlider.swift */; };
+		9AD8EEE02379BD4B00FAA505 /* UIImage+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD8EEDF2379BD4B00FAA505 /* UIImage+Color.swift */; };
+		9AD8EEE12379BDCC00FAA505 /* CustomRangeSeekSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE00D96D1E7AA99A0032CA93 /* CustomRangeSeekSlider.swift */; };
 		CE1967FE1E7668A300DBAE72 /* RangeSeekSlider.swift in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* RangeSeekSlider.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE2FEE5A1E7A639C00D396B5 /* RangeSeekSliderDelegate.swift in Headers */ = {isa = PBXBuildFile; fileRef = CE3D49B51E712B840071E992 /* RangeSeekSliderDelegate.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE3D49AF1E7121990071E992 /* RangeSeekSlider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* RangeSeekSlider.framework */; };
@@ -58,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9AD8EEDF2379BD4B00FAA505 /* UIImage+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Color.swift"; path = "Demo/RangeSeekSliderDemo/UIImage+Color.swift"; sourceTree = SOURCE_ROOT; };
 		CE00D96D1E7AA99A0032CA93 /* CustomRangeSeekSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomRangeSeekSlider.swift; path = Demo/RangeSeekSliderDemo/CustomRangeSeekSlider.swift; sourceTree = SOURCE_ROOT; };
 		CE3D49B51E712B840071E992 /* RangeSeekSliderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSeekSliderDelegate.swift; sourceTree = "<group>"; };
 		CE3D49B81E71409A0071E992 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -119,6 +121,7 @@
 		CE9937561E70236800EA982A /* RangeSeekSliderDemo */ = {
 			isa = PBXGroup;
 			children = (
+				9AD8EEDF2379BD4B00FAA505 /* UIImage+Color.swift */,
 				CEF273E21E7023ED003AA995 /* AppDelegate.swift */,
 				CEF273E41E7023F7003AA995 /* Assets.xcassets */,
 				CEF273E51E7023F7003AA995 /* Info.plist */,
@@ -326,7 +329,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEF273EE1E702421003AA995 /* AppDelegate.swift in Sources */,
+				9AD8EEE12379BDCC00FAA505 /* CustomRangeSeekSlider.swift in Sources */,
 				CEF273EF1E702424003AA995 /* ViewController.swift in Sources */,
+				9AD8EEE02379BD4B00FAA505 /* UIImage+Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,7 +342,6 @@
 				OBJ_21 /* RangeSeekSlider.swift in Sources */,
 				CEBD453C1E9A42E4001AF6DF /* TapticEngine.swift in Sources */,
 				CE3D49B61E712B840071E992 /* RangeSeekSliderDelegate.swift in Sources */,
-				CE00D96E1E7AA99A0032CA93 /* CustomRangeSeekSlider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

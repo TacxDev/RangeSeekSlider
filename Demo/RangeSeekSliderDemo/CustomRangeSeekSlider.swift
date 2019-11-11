@@ -1,12 +1,13 @@
 //
 //  CustomRangeSeekSlider.swift
-//  RangeSeekSlider
+//  RangeSeekSliderDemo
 //
 //  Created by Keisuke Shoji on 2017/03/16.
 //
 //
 
 import UIKit
+import RangeSeekSlider
 
 @IBDesignable final class CustomRangeSeekSlider: RangeSeekSlider {
 
@@ -29,43 +30,12 @@ import UIKit
         selectedMinValue = 15.0
         selectedMaxValue = CGFloat(prices.count - 1)
         minDistance = 1.0
-        handleColor = pink
-        minLabelColor = pink
-        maxLabelColor = pink
+        
+        leftHandleImage = UIImage.image(color: pink)
+        rightHandleImage = UIImage.image(color: pink)
+        
         colorBetweenHandles = pink
         tintColor = gray
-        numberFormatter.locale = Locale(identifier: "ja_JP")
-        numberFormatter.numberStyle = .currency
-        labelsFixed = true
         initialColor = gray
-
-        delegate = self
-    }
-
-    fileprivate func priceString(value: CGFloat) -> String {
-        let index: Int = Int(roundf(Float(value)))
-        let price: Int = prices[index]
-        if price == .min {
-            return "Min"
-        } else if price == .max {
-            return "Max"
-        } else {
-            let priceString: String? = numberFormatter.string(from: price as NSNumber)
-            return priceString ?? ""
-        }
-    }
-}
-
-
-// MARK: - RangeSeekSliderDelegate
-
-extension CustomRangeSeekSlider: RangeSeekSliderDelegate {
-
-    func rangeSeekSlider(_ slider: RangeSeekSlider, stringForMinValue minValue: CGFloat) -> String? {
-        return priceString(value: minValue)
-    }
-
-    func rangeSeekSlider(_ slider: RangeSeekSlider, stringForMaxValue maxValue: CGFloat) -> String? {
-        return priceString(value: maxValue)
     }
 }

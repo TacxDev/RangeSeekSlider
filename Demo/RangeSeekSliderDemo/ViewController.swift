@@ -33,14 +33,8 @@ final class ViewController: UIViewController {
         rangeSliderCurrency.selectedMaxValue = 140.0
         rangeSliderCurrency.minDistance = 20.0
         rangeSliderCurrency.maxDistance = 80.0
-        rangeSliderCurrency.handleColor = .green
-        rangeSliderCurrency.handleDiameter = 30.0
-        rangeSliderCurrency.selectedHandleDiameterMultiplier = 1.3
-        rangeSliderCurrency.numberFormatter.numberStyle = .currency
-        rangeSliderCurrency.numberFormatter.locale = Locale(identifier: "en_US")
-        rangeSliderCurrency.numberFormatter.maximumFractionDigits = 2
-        rangeSliderCurrency.minLabelFont = UIFont(name: "ChalkboardSE-Regular", size: 15.0)!
-        rangeSliderCurrency.maxLabelFont = UIFont(name: "ChalkboardSE-Regular", size: 15.0)!
+        rangeSliderCurrency.leftHandleImage = UIImage.image(color: .green)
+        rangeSliderCurrency.rightHandleImage = UIImage.image(color: .green)
 
         // custom number formatter range slider
         rangeSliderCustom.delegate = self
@@ -48,12 +42,10 @@ final class ViewController: UIViewController {
         rangeSliderCustom.maxValue = 100.0
         rangeSliderCustom.selectedMinValue = 40.0
         rangeSliderCustom.selectedMaxValue = 60.0
-        rangeSliderCustom.handleImage = #imageLiteral(resourceName: "custom-handle")
-        rangeSliderCustom.selectedHandleDiameterMultiplier = 1.0
+        rangeSliderCustom.leftHandleImage = #imageLiteral(resourceName: "custom-handle")
+        rangeSliderCustom.rightHandleImage = #imageLiteral(resourceName: "custom-handle")
         rangeSliderCustom.colorBetweenHandles = .red
         rangeSliderCustom.lineHeight = 10.0
-        rangeSliderCustom.numberFormatter.positivePrefix = "$"
-        rangeSliderCustom.numberFormatter.positiveSuffix = "M"
     }
 }
 
