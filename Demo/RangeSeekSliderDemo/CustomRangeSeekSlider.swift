@@ -22,7 +22,7 @@ import RangeSeekSlider
         ]
 
     override func setupStyle() {
-        let pink: UIColor = #colorLiteral(red: 0.0000000000, green: 0.5019607843, blue: 0.0000000000, alpha: 1) // greenCSS3 #008000
+        let green: UIColor = #colorLiteral(red: 0.0000000000, green: 0.5019607843, blue: 0.0000000000, alpha: 1) // greenCSS3 #008000
         let gray: UIColor = #colorLiteral(red: 0.5019607843, green: 0.5019607843, blue: 0.5019607843, alpha: 1) // gray #808080
 
         minValue = 0.0
@@ -31,10 +31,10 @@ import RangeSeekSlider
         selectedMaxValue = CGFloat(prices.count - 1)
         minDistance = 1.0
         
-        leftHandleImage = UIImage.image(color: pink)
-        rightHandleImage = UIImage.image(color: pink)
+        leftHandleImage = UIImage.image(color: green)
+        rightHandleImage = UIImage.image(color: green)
         
-        colorBetweenHandles = pink
+        colorBetweenHandles = green
         tintColor = gray
         initialColor = gray
     }

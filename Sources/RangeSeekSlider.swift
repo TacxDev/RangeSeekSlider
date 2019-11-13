@@ -9,7 +9,10 @@
 import UIKit
 
 @IBDesignable open class RangeSeekSlider: UIControl {
-
+    private struct Constant {
+        static let barSidePadding: CGFloat = 2.0
+    }
+    
     // MARK: - initializers
 
     public required init?(coder aDecoder: NSCoder) {
@@ -206,26 +209,12 @@ import UIKit
 
         return true
     }
-    
-    private func currentHandleSize() -> CGSize {
-        switch handleTracking {
-            case .left:     return leftHandleImage?.size ?? .zero
-            case .right:    return leftHandleImage?.size ?? .zero
-            case .none:     return .zero
-        }
-    }
 
     open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         guard handleTracking != .none else { return false }
 
         let location: CGPoint = touch.location(in: self)
-        let handleSize = currentHandleSize()
-
-        // find out the percentage along the line we are in x coordinate terms (subtracting half the frames width to account for moving the middle of the handle, not the left hand side)
-        let percentage: CGFloat = (location.x - sliderLine.frame.minX - handleSize.width / 2.0) / (sliderLine.frame.maxX - sliderLine.frame.minX)
-
-        // multiply that percentage by self.maxValue to get the new selected minimum value
-        let selectedValue: CGFloat = percentage * (maxValue - minValue) + minValue
+        let selectedValue = valueAlongTheLine(for: location.x)
 
         switch handleTracking {
         case .left:
@@ -270,8 +259,7 @@ import UIKit
         layer.addSublayer(leftHandle)
         layer.addSublayer(rightHandle)
 
-        let handleSize = currentHandleSize()
-        let handleFrame: CGRect = CGRect(x: 0.0, y: 0.0, width: handleSize.width, height: handleSize.height)
+        let handleFrame: CGRect = CGRect(x: 0.0, y: 0.0, width: 16, height: 16)
         leftHandle.frame = handleFrame
         rightHandle.frame = handleFrame
 
@@ -279,39 +267,37 @@ import UIKit
 
         refresh()
     }
+    
+    private func valueAlongTheLine(for xPosition: CGFloat) -> CGFloat {
+        let leftHandleWidth = leftHandleImage?.size.width ?? 0
+        let rightHandleWidth = rightHandleImage?.size.width ?? 0
 
-    private func percentageAlongLine(for value: CGFloat) -> CGFloat {
-        // stops divide by zero errors where maxMinDif would be zero. If the min and max are the same the percentage has no point.
-        guard minValue < maxValue else { return 0.0 }
-
-        // get the difference between the maximum and minimum values (e.g if max was 100, and min was 50, difference is 50)
-        let maxMinDif: CGFloat = maxValue - minValue
-
-        // now subtract value from the minValue (e.g if value is 75, then 75-50 = 25)
-        let valueSubtracted: CGFloat = value - minValue
-
-        // now divide valueSubtracted by maxMinDif to get the percentage (e.g 25/50 = 0.5)
-        return valueSubtracted / maxMinDif
+        // find out the percentage along the line we are in x coordinate terms (subtracting half the frames width to account for moving the middle of the handle, not the left hand side)
+        
+        let sliderLineLeft = sliderLine.frame.minX + leftHandleWidth / 2
+        let sliderLineRight = sliderLine.frame.maxX - rightHandleWidth / 2
+        let percentage: CGFloat = (xPosition - sliderLineLeft) / (sliderLineRight - sliderLineLeft)
+                
+        // multiply that percentage by self.maxValue to get the new selected minimum value
+        let selectedValue: CGFloat = percentage * (maxValue - minValue) + minValue
+        
+        return selectedValue
     }
 
     private func xPositionAlongLine(for value: CGFloat) -> CGFloat {
-        // first get the percentage along the line for the value
-        let percentage: CGFloat = percentageAlongLine(for: value)
+        let leftHandleWidth = leftHandleImage?.size.width ?? 0
+        let rightHandleWidth = rightHandleImage?.size.width ?? 0
 
-        // get the difference between the maximum and minimum coordinate position x values (e.g if max was x = 310, and min was x=10, difference is 300)
-        let maxMinDif: CGFloat = sliderLine.frame.maxX - sliderLine.frame.minX
+        let percentage: CGFloat = (minValue < maxValue) ? (value - minValue) / (maxValue - minValue) : 0
+        let maxMinDif: CGFloat = frame.width - leftHandleWidth/2 - rightHandleWidth/2
 
-        // now multiply the percentage by the minMaxDif to see how far along the line the point should be, and add it onto the minimum x position.
-        let offset: CGFloat = percentage * maxMinDif
-
-        return sliderLine.frame.minX + offset
+        return leftHandleWidth/2 + percentage * maxMinDif
     }
 
     private func updateLineHeight() {
-        let barSidePadding: CGFloat = 16.0
         let yMiddle: CGFloat = frame.height / 2.0
-        let lineLeftSide: CGPoint = CGPoint(x: barSidePadding, y: yMiddle)
-        let lineRightSide: CGPoint = CGPoint(x: frame.width - barSidePadding,
+        let lineLeftSide: CGPoint = CGPoint(x: Constant.barSidePadding, y: yMiddle)
+        let lineRightSide: CGPoint = CGPoint(x: frame.width - Constant.barSidePadding,
                                              y: yMiddle)
         sliderLine.frame = CGRect(x: lineLeftSide.x,
                                   y: lineLeftSide.y,
@@ -344,12 +330,10 @@ import UIKit
     private func updateHandlePositions() {
         let leftHandleCenter = CGPoint(x: xPositionAlongLine(for: selectedMinValue),
                                        y: sliderLine.frame.midY)
-        
-        leftHandle.frame = CGRect(center: leftHandleCenter, size: leftHandleImage?.size ?? .zero)
-        
         let rightHandleCenter = CGPoint(x: xPositionAlongLine(for: selectedMaxValue),
                                         y: sliderLine.frame.midY)
-
+        
+        leftHandle.frame = CGRect(center: leftHandleCenter, size: leftHandleImage?.size ?? .zero)
         rightHandle.frame = CGRect(center: rightHandleCenter, size: rightHandleImage?.size ?? .zero)
         
         // positioning for the dist slider line
