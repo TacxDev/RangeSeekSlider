@@ -470,10 +470,6 @@ import UIKit
     
     private func layoutContent() {
         setNeedsLayout()
-
-//        UIView.performWithoutAnimation {
-//            layoutIfNeeded()
-//        }
     }
 }
 
