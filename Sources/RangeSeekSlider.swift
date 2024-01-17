@@ -372,9 +372,6 @@ import UIKit
     }
 
     private func updateAccessibilityElements() {
-        leftHandleAccessibilityElement.accessibilityFrameInContainerSpace = leftHandle.frame
-        rightHandleAccessibilityElement.accessibilityFrameInContainerSpace = rightHandle.frame
-
         accessibilityElements = [leftHandleAccessibilityElement, rightHandleAccessibilityElement]
     }
 
@@ -439,13 +436,11 @@ import UIKit
             selectedMaxValue = maxValue
         }
 
-        layoutContent()
-
         updateColors()
 
         delegate?.rangeSeekSlider(self, didChange: selectedMinValue, maxValue: selectedMaxValue)
 
-        updateAccessibilityElements()
+        layoutContent()
     }
     
     private func layoutContent() {
