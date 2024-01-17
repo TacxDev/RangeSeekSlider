@@ -144,6 +144,24 @@ import UIKit
         }
     }
 
+    /// The label exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
+    @IBInspectable open var minLabelAccessibilityLabel: String?
+
+    /// The label exposed in accessibility mode for maximum value handler. If not set, the default is empty String.
+    @IBInspectable open var maxLabelAccessibilityLabel: String?
+
+    /// The value exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
+    @IBInspectable open var minLabelAccessibilityValue: String?
+
+    /// The value exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
+    @IBInspectable open var maxLabelAccessibilityValue: String?
+
+    /// The brief description displayed in accessibility mode for minimum value handler. If not set, the default is empty String.
+    @IBInspectable open var minLabelAccessibilityHint: String?
+
+    /// The brief description displayed in accessibility mode for maximum value handler. If not set, the default is empty String.
+    @IBInspectable open var maxLabelAccessibilityHint: String?
+
     // MARK: - private stored properties
 
     private enum HandleTracking { case none, left, right }
@@ -159,6 +177,28 @@ import UIKit
     private var previousStepMinValue: CGFloat?
     private var previousStepMaxValue: CGFloat?
 
+    private var leftHandleAccessibilityElement: UIAccessibilityElement {
+        let element: RangeSeekSliderLeftElement = RangeSeekSliderLeftElement(accessibilityContainer: self)
+        element.isAccessibilityElement = true
+        element.accessibilityLabel = minLabelAccessibilityLabel
+        element.accessibilityValue = minLabelAccessibilityValue
+        element.accessibilityHint = minLabelAccessibilityHint
+        element.accessibilityFrameInContainerSpace = convert(leftHandle.frame, to: self)
+        element.accessibilityTraits = [.adjustable, .updatesFrequently]
+        return element
+    }
+
+    private var rightHandleAccessibilityElement: UIAccessibilityElement {
+        let element: RangeSeekSliderRightElement = RangeSeekSliderRightElement(accessibilityContainer: self)
+        element.isAccessibilityElement = true
+        element.accessibilityLabel = maxLabelAccessibilityLabel
+        element.accessibilityValue = maxLabelAccessibilityValue
+        element.accessibilityHint = maxLabelAccessibilityHint
+        element.accessibilityFrameInContainerSpace = convert(rightHandle.frame, to: self)
+        element.accessibilityTraits = [.adjustable, .updatesFrequently]
+        return element
+    }
+
     // MARK: - UIView
 
     open override func layoutSubviews() {
@@ -169,6 +209,7 @@ import UIKit
             updateLineHeight()
             updateColors()
             updateHandlePositions()
+            updateAccessibilityElements()
         }
     }
     
@@ -250,6 +291,9 @@ import UIKit
     // MARK: - private methods
 
     private func setup() {
+        isAccessibilityElement = false
+        accessibilityElements = [leftHandleAccessibilityElement, rightHandleAccessibilityElement]
+
         // draw the slider line
         layer.addSublayer(sliderLine)
 
@@ -327,6 +371,13 @@ import UIKit
         }
     }
 
+    private func updateAccessibilityElements() {
+        leftHandleAccessibilityElement.accessibilityFrameInContainerSpace = leftHandle.frame
+        rightHandleAccessibilityElement.accessibilityFrameInContainerSpace = rightHandle.frame
+
+        accessibilityElements = [leftHandleAccessibilityElement, rightHandleAccessibilityElement]
+    }
+
     private func updateHandlePositions() {
         let leftHandleCenter = CGPoint(x: xPositionAlongLine(for: selectedMinValue),
                                        y: sliderLine.frame.midY)
@@ -392,19 +443,54 @@ import UIKit
 
         updateColors()
 
-        // update the delegate
-        if let delegate = delegate, handleTracking != .none {
-            delegate.rangeSeekSlider(self, didChange: selectedMinValue, maxValue: selectedMaxValue)
-        }
+        delegate?.rangeSeekSlider(self, didChange: selectedMinValue, maxValue: selectedMaxValue)
+
+        updateAccessibilityElements()
     }
     
     private func layoutContent() {
         setNeedsLayout()
-        
+
 //        UIView.performWithoutAnimation {
 //            layoutIfNeeded()
 //        }
     }
+}
+
+// MARK: - RangeSeekSliderLeftElement
+
+private final class RangeSeekSliderLeftElement: UIAccessibilityElement {
+
+    override func accessibilityIncrement() {
+        guard let slider = accessibilityContainer as? RangeSeekSlider else { return }
+        slider.selectedMinValue += slider.step
+        slider.refresh()
+    }
+
+    override func accessibilityDecrement() {
+        guard let slider = accessibilityContainer as? RangeSeekSlider else { return }
+        slider.selectedMinValue -= slider.step
+        slider.refresh()
+    }
+
+}
+
+// MARK: - RangeSeekSliderRightElement
+
+private final class RangeSeekSliderRightElement: UIAccessibilityElement {
+
+    override func accessibilityIncrement() {
+        guard let slider = accessibilityContainer as? RangeSeekSlider else { return }
+        slider.selectedMaxValue += slider.step
+        slider.refresh()
+    }
+
+    override func accessibilityDecrement() {
+        guard let slider = accessibilityContainer as? RangeSeekSlider else { return }
+        slider.selectedMaxValue -= slider.step
+        slider.refresh()
+    }
+
 }
 
 // MARK: - CGRect
