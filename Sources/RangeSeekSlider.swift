@@ -145,22 +145,46 @@ import UIKit
     }
 
     /// The label exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
-    @IBInspectable open var minLabelAccessibilityLabel: String?
+    @IBInspectable open var minLabelAccessibilityLabel: String? {
+        didSet {
+            leftHandleAccessibilityElement.accessibilityLabel = minLabelAccessibilityLabel
+        }
+    }
 
     /// The label exposed in accessibility mode for maximum value handler. If not set, the default is empty String.
-    @IBInspectable open var maxLabelAccessibilityLabel: String?
+    @IBInspectable open var maxLabelAccessibilityLabel: String? {
+        didSet {
+            rightHandleAccessibilityElement.accessibilityLabel = maxLabelAccessibilityLabel
+        }
+    }
 
     /// The value exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
-    @IBInspectable open var minLabelAccessibilityValue: String?
+    @IBInspectable open var minLabelAccessibilityValue: String? {
+        didSet {
+            leftHandleAccessibilityElement.accessibilityValue = minLabelAccessibilityValue
+        }
+    }
 
     /// The value exposed in accessibility mode for minimum value handler. If not set, the default is empty String.
-    @IBInspectable open var maxLabelAccessibilityValue: String?
+    @IBInspectable open var maxLabelAccessibilityValue: String? {
+        didSet {
+            rightHandleAccessibilityElement.accessibilityValue = maxLabelAccessibilityValue
+        }
+    }
 
     /// The brief description displayed in accessibility mode for minimum value handler. If not set, the default is empty String.
-    @IBInspectable open var minLabelAccessibilityHint: String?
+    @IBInspectable open var minLabelAccessibilityHint: String? {
+        didSet {
+            leftHandleAccessibilityElement.accessibilityHint = minLabelAccessibilityHint
+        }
+    }
 
     /// The brief description displayed in accessibility mode for maximum value handler. If not set, the default is empty String.
-    @IBInspectable open var maxLabelAccessibilityHint: String?
+    @IBInspectable open var maxLabelAccessibilityHint: String? {
+        didSet {
+            rightHandleAccessibilityElement.accessibilityHint = maxLabelAccessibilityHint
+        }
+    }
 
     // MARK: - private stored properties
 
@@ -177,7 +201,7 @@ import UIKit
     private var previousStepMinValue: CGFloat?
     private var previousStepMaxValue: CGFloat?
 
-    private var leftHandleAccessibilityElement: UIAccessibilityElement {
+    private lazy var leftHandleAccessibilityElement: UIAccessibilityElement = {
         let element: RangeSeekSliderLeftElement = RangeSeekSliderLeftElement(accessibilityContainer: self)
         element.isAccessibilityElement = true
         element.accessibilityLabel = minLabelAccessibilityLabel
@@ -186,9 +210,9 @@ import UIKit
         element.accessibilityFrameInContainerSpace = convert(leftHandle.frame, to: self)
         element.accessibilityTraits = [.adjustable, .updatesFrequently]
         return element
-    }
+    }()
 
-    private var rightHandleAccessibilityElement: UIAccessibilityElement {
+    private lazy var rightHandleAccessibilityElement: UIAccessibilityElement = {
         let element: RangeSeekSliderRightElement = RangeSeekSliderRightElement(accessibilityContainer: self)
         element.isAccessibilityElement = true
         element.accessibilityLabel = maxLabelAccessibilityLabel
@@ -197,7 +221,7 @@ import UIKit
         element.accessibilityFrameInContainerSpace = convert(rightHandle.frame, to: self)
         element.accessibilityTraits = [.adjustable, .updatesFrequently]
         return element
-    }
+    }()
 
     // MARK: - UIView
 
@@ -372,7 +396,8 @@ import UIKit
     }
 
     private func updateAccessibilityElements() {
-        accessibilityElements = [leftHandleAccessibilityElement, rightHandleAccessibilityElement]
+        leftHandleAccessibilityElement.accessibilityFrameInContainerSpace = convert(leftHandle.frame, to: self)
+        rightHandleAccessibilityElement.accessibilityFrameInContainerSpace = convert(rightHandle.frame, to: self)
     }
 
     private func updateHandlePositions() {
