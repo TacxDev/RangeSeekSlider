@@ -463,7 +463,9 @@ import UIKit
 
         updateColors()
 
-        delegate?.rangeSeekSlider(self, didChange: selectedMinValue, maxValue: selectedMaxValue)
+        if let delegate, handleTracking != .none {
+            delegate.rangeSeekSlider(self, didChange: selectedMinValue, maxValue: selectedMaxValue)
+        }
 
         layoutContent()
     }
